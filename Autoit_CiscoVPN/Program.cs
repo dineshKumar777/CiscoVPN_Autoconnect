@@ -3,6 +3,8 @@ using AutoIt;
 using System.Configuration;
 using System.IO;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Linq;
 
 namespace Autoit_CiscoVPN
 {
@@ -10,9 +12,10 @@ namespace Autoit_CiscoVPN
     {
         static void Main(string[] args)
         {
-            AutoLogin app = new AutoLogin();
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, arg) => { if (arg.Name.StartsWith("AutoItX3")) return Assembly.Load(Properties.Resources.AutoItX3_Assembly); return null; };
 
             Console.WriteLine("-- Auto login script started");
+            AutoLogin app = new AutoLogin();
             app.OpenCiscoVPN();
             app.ConnectToDomain();
             app.LoginUsingUserCredentials();
