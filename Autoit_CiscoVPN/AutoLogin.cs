@@ -27,7 +27,7 @@ namespace Autoit_CiscoVPN
         #endregion
 
         #region Common methods
-        public void ShowErrorPopup(string errorMsg)
+        private void ShowErrorPopup(string errorMsg)
         {
             errorMsg += "\n\nScript will STOP now. Verify the error and restart the script.";
             DialogResult dialog = MessageBox.Show(errorMsg, messageBoxTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -36,7 +36,7 @@ namespace Autoit_CiscoVPN
                 Environment.Exit(0);
         }
 
-        public void WaitForWindow(string windowID)
+        private void WaitForWindow(string windowID)
         {
             var handle = AutoItX.WinWaitActive(windowID, "", waitTime);
 
@@ -44,7 +44,7 @@ namespace Autoit_CiscoVPN
                 ShowErrorPopup($"'{windowID}' : unable to locate this window title");
         }
 
-        public void CheckControlVisibility(string windowTitle, string controlID)
+        private void CheckControlVisibility(string windowTitle, string controlID)
         {
             var isControlVisible = AutoItX.ControlCommand(windowTitle, "", controlID, "IsVisible", "");
 
@@ -62,11 +62,16 @@ namespace Autoit_CiscoVPN
         #endregion
 
 
-
+        public AutoLogin()
+        {
+            OpenCiscoVPN();
+            ConnectToDomain();
+            LoginUsingUserCredentials();
+        }
         
        
 
-        public void OpenCiscoVPN()
+        private void OpenCiscoVPN()
         {
             if (File.Exists(ciscoExePath))
                 AutoItX.Run(ciscoExePath, "", 1);
@@ -75,7 +80,7 @@ namespace Autoit_CiscoVPN
         }
 
 
-        public void ConnectToDomain()
+        private void ConnectToDomain()
         {
             WaitForWindow(domainWindowTitle);
 
@@ -98,7 +103,7 @@ namespace Autoit_CiscoVPN
             Console.WriteLine("-- Connecting to domain");
         }
 
-        public void LoginUsingUserCredentials()
+        private void LoginUsingUserCredentials()
         {
             WaitForWindow(LoginWindowTitle);
 

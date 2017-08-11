@@ -16,9 +16,6 @@ namespace Autoit_CiscoVPN
 
             Console.WriteLine("-- Auto login script started");
             AutoLogin app = new AutoLogin();
-            app.OpenCiscoVPN();
-            app.ConnectToDomain();
-            app.LoginUsingUserCredentials();
             Console.WriteLine("-- Auto login script completed successfully");
         }
     }

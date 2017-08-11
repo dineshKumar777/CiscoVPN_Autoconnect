@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Autoit_CiscoVPN")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Connect to Cisco VPN automatically using Autoit framework")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Autoit_CiscoVPN")]
