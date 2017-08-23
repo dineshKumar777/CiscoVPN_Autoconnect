@@ -9,7 +9,7 @@ namespace Autoit_CiscoVPN
     class AutoLogin : AppConfig
     {
         int waitTime = 10;
-        string messageBoxTitle = "CiscoVPN_Autoit MSG";
+        string messageBoxTitle = "CiscoVPN_Autoit";
         Stopwatch stopwatch;
 
         #region Cisco_MainWindow handles
@@ -97,8 +97,7 @@ namespace Autoit_CiscoVPN
             OpenCiscoVPN();
             ConnectToDomain();
             LoginUsingUserCredentials();
-            AcceptTermsandConditionPopup(); // Accept terms & conditions popup ifany
-            Console.WriteLine("-- Finished login");
+            AcceptTermsandConditionPopup(); //Will accept terms & conditions popup ifany
         }
 
 
@@ -108,7 +107,7 @@ namespace Autoit_CiscoVPN
             if (File.Exists(ciscoExePath))
                 AutoItX.Run(ciscoExePath, "", 1);
             else
-                ShowErrorPopup("'Install CiscoVPN' or 'Enter the correct path in CONFIG file'.");
+                ShowErrorPopup("'INSTALL CiscoVPN' or 'Enter the correct path in CONFIG file'.");
         }
 
 
