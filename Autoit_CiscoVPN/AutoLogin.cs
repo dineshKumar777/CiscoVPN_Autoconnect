@@ -1,5 +1,6 @@
 ﻿using AutoIt;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -9,6 +10,7 @@ namespace Autoit_CiscoVPN
     {
         int waitTime = 10;
         string messageBoxTitle = "CiscoVPN_Autoit MSG";
+        Stopwatch stopwatch;
 
         #region Cisco_MainWindow handles
         string domainWindowTitle = "Cisco AnyConnect Secure Mobility Client";
@@ -19,11 +21,16 @@ namespace Autoit_CiscoVPN
         #endregion
 
         #region Cisco_loginWindow handles
-        string LoginWindowTitle = "Cisco AnyConnect | " + domainName;
+        string loginWindowTitle = "Cisco AnyConnect | " + domainName;
         string groupDropdown = "[CLASS:ComboBox; INSTANCE:1]";
         string usernameTextbox = "[CLASS:Edit; INSTANCE:1]";
         string passwordTextbox = "[CLASS:Edit; INSTANCE:2]";
         string okButton = "[CLASS:Button; TEXT:OK; INSTANCE:1]";
+        #endregion
+
+        #region Cisco_TermsandCondition handles
+        string termsandConditonWindowTitle = "Cisco AnyConnect";
+        string acceptButton = "[CLASS:Button; TEXT:Accept; INSTANCE:1]";
         #endregion
 
         #region Common methods
@@ -36,12 +43,17 @@ namespace Autoit_CiscoVPN
                 Environment.Exit(0);
         }
 
-        private void WaitForWindow(string windowID)
+        private void WaitForWindow(string windowID, int waitTime = 10)
         {
+            AutoItX.AutoItSetOption("WinTitleMatchMode", 3);
             var handle = AutoItX.WinWaitActive(windowID, "", waitTime);
 
-            if (AutoItX.WinExists(windowID) == 0) //Autoit return 1 for success and 0 for failure
-                ShowErrorPopup($"'{windowID}' : unable to locate this window title");
+            if(windowID != termsandConditonWindowTitle) //Dont show errorpopup if there is no terms and condition popup
+            {
+                if (AutoItX.WinExists(windowID) == 0) //Autoit return 1 for success and 0 for failure
+                    ShowErrorPopup($"'{windowID}' : unable to locate this window title");
+            }
+            
         }
 
         private void CheckControlVisibility(string windowTitle, string controlID)
@@ -51,13 +63,30 @@ namespace Autoit_CiscoVPN
             if(controlID == disconnectButton)
             {
                 if (Int16.Parse(isControlVisible) == 1) //Autoit will return 1 if the control is visible
+                {
+                    //AutoItX.ControlClick(domainWindowTitle, "", disconnectButton);   //Uncomment this line if you need disconnect vpn if its already connected
                     ShowErrorPopup($"Cisco VPN is ALREADY CONNECTED.");
+                }
             }
             else
             {
                 if (Int16.Parse(isControlVisible) == 0) //Autoit will return 1 if the control is visible
                     ShowErrorPopup($"CONTROL NOT VISIBLE\nwindowtitle={windowTitle}\ncontrolID={controlID}");
             }
+        }
+
+        private void WaitTillControlEnabled(string windowTitle, string controlID)
+        {
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            //wait till the control enable and also wait upto the waittime declared
+            while (Int16.Parse(AutoItX.ControlCommand(windowTitle, "", controlID, "IsEnabled", "")) == 0 && stopwatch.Elapsed.Seconds <= waitTime)
+            {
+                AutoItX.Sleep(100);
+            }
+            stopwatch.Stop();
+            AutoItX.Sleep(500); //Added this sleep for stability
         }
         #endregion
 
@@ -67,9 +96,11 @@ namespace Autoit_CiscoVPN
             OpenCiscoVPN();
             ConnectToDomain();
             LoginUsingUserCredentials();
+            AcceptTermsandConditionPopup(); // Accept terms & conditions popup ifany
+            Console.WriteLine("-- Finished login");
         }
-        
-       
+
+
 
         private void OpenCiscoVPN()
         {
@@ -85,9 +116,9 @@ namespace Autoit_CiscoVPN
             WaitForWindow(domainWindowTitle);
 
             //Check all elements are visible in particular window
+            CheckControlVisibility(domainWindowTitle, disconnectButton);
             CheckControlVisibility(domainWindowTitle, domainTextbox);
             CheckControlVisibility(domainWindowTitle, domainDropdown);
-            CheckControlVisibility(domainWindowTitle, disconnectButton);
 
             //Check textbox value and select domain from dropdown
             string defaultDomainVal = AutoItX.ControlGetText(domainWindowTitle, "", domainTextbox);
@@ -105,22 +136,31 @@ namespace Autoit_CiscoVPN
 
         private void LoginUsingUserCredentials()
         {
-            WaitForWindow(LoginWindowTitle);
+            WaitForWindow(loginWindowTitle);
 
             //Check all elements are visible in this particular window
-            CheckControlVisibility(LoginWindowTitle, usernameTextbox);
-            CheckControlVisibility(LoginWindowTitle, passwordTextbox);
-            CheckControlVisibility(LoginWindowTitle, okButton);
+            CheckControlVisibility(loginWindowTitle, usernameTextbox);
+            CheckControlVisibility(loginWindowTitle, passwordTextbox);
+            CheckControlVisibility(loginWindowTitle, okButton);
 
-            CheckforGroupSelector(LoginWindowTitle, groupDropdown);
-
-            AutoItX.ControlSetText(LoginWindowTitle, "", usernameTextbox, userName);
-            AutoItX.ControlSetText(LoginWindowTitle, "", passwordTextbox, passWord);
-            AutoItX.ControlClick(LoginWindowTitle, "", okButton);
-            Console.WriteLine("-- Finished login");
-
+            CheckforGroupSelector(loginWindowTitle, groupDropdown);
+            WaitTillControlEnabled(loginWindowTitle, okButton);
+            AutoItX.ControlSetText(loginWindowTitle, "", usernameTextbox, userName);
+            AutoItX.ControlSetText(loginWindowTitle, "", passwordTextbox, passWord);
+            AutoItX.ControlClick(loginWindowTitle, "", okButton);
         }
 
+        // Check for terms and conditions popup and click accept button if any
+        private void AcceptTermsandConditionPopup()
+        {
+            WaitForWindow(termsandConditonWindowTitle, 4); // wait for 4 secs
+            if(AutoItX.WinExists(termsandConditonWindowTitle) == 1)
+            {
+                CheckControlVisibility(termsandConditonWindowTitle, acceptButton);
+
+                AutoItX.ControlClick(termsandConditonWindowTitle, "", acceptButton);
+            }
+        }
 
         private void CheckforGroupSelector(string windowTitle, string controlID)
         {
