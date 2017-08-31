@@ -1,3 +1,5 @@
 language: csharp
 solution: "./Autoit_CiscoVPN.sln"
+ notifications:
+    slack: dineshprojects:ZlOk0kblbM5Dk7uzC6dgwuM3
 
