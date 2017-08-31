@@ -4,7 +4,7 @@ notifications:
     on_success: always
     on_failure: change
     rooms:
-      secure: ZlOk0kblbM5Dk7uzC6dgwuM3
+      secure: ZlOk0kblbM5Dk7uzC6dgwuM3#buildstatus
 solution: "./Autoit_CiscoVPN.sln"
 
 
