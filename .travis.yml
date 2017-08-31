@@ -3,7 +3,6 @@ notifications:
   slack:
     rooms:
       - dineshprojects:ZlOk0kblbM5Dk7uzC6dgwuM3#buildstatus
-      - dineshprojects:ZlOk0kblbM5Dk7uzC6dgwuM3#random
 solution: "./Autoit_CiscoVPN.sln"
 
 
