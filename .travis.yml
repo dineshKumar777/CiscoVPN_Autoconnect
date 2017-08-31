@@ -2,7 +2,7 @@ language: csharp
 notifications:
   slack:
     on_success: always
-    on_failure: change
+    on_failure: always
     rooms:
       secure: ZlOk0kblbM5Dk7uzC6dgwuM3#buildstatus
 solution: "./Autoit_CiscoVPN.sln"
