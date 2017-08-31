@@ -1,7 +1,3 @@
 language: csharp
 solution: "./Autoit_CiscoVPN.sln"
-install:
-- travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./Autoit_CiscoVPN.sln
-script:
-- xbuild ./Autoit_CiscoVPN.sln
-- mono  ./Autoit_CiscoVPN/bin/Debug/AutoItX3.Assembly.dll
+script: ./build.sh
