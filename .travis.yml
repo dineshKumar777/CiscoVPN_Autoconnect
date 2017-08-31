@@ -1,0 +1,2 @@
+language: csharp
+solution: "./Autoit_CiscoVPN.sln"
