@@ -2,7 +2,7 @@ language: csharp
 notifications:
   slack:
     rooms:
-      - dineshprojects:ZlOk0kblbM5Dk7uzC6dgwuM3#buildstatus
+      - $SLACK_CHANNEL
 solution: "./Autoit_CiscoVPN.sln"
 
 
