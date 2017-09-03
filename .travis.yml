@@ -1,7 +1,6 @@
 language: csharp
 solution: "./Autoit_CiscoVPN.sln"
 after_success:
-	script: 
        - echo $TRAVIS_BUILD_DIR
        - mkdir ReleasePackage
        - ls -d */
