@@ -1,6 +1,6 @@
 language: csharp
 solution: "./Autoit_CiscoVPN.sln"
-echo $TRAVIS_BUILD_DIR
+script: echo $TRAVIS_BUILD_DIR
 
         
 
