@@ -5,7 +5,7 @@ after_success:
        - echo $TRAVIS_BUILD_DIR
        - mkdir ReleasePackage
        - ls -d */
-       - echo 'package successful' 
+       - echo "package successful"
 
         
 
