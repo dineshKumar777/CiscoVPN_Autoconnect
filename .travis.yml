@@ -1,7 +1,7 @@
 language: csharp
 solution: "./Autoit_CiscoVPN.sln"
 install:
-       - sudo apt-get install zip unzip
+       - apt-get install zip unzip
 after_success:
        - echo $TRAVIS_BUILD_DIR
        - mkdir ReleasePackage
