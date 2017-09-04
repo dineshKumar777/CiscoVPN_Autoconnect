@@ -7,6 +7,7 @@ after_success:
        - cd $TRAVIS_BUILD_DIR/Autoit_CiscoVPN/bin/Release/
        - cp -v Autoit_CiscoVPN.exe AutoItX3.Assembly.dll AutoItX3.dll Autoit_CiscoVPN.exe.config $TRAVIS_BUILD_DIR/ReleasePackage
        - cd $TRAVIS_BUILD_DIR/ReleasePackage
+       - zip ReleasePackage*
        - ls -d */
        - echo "package successful"
 
