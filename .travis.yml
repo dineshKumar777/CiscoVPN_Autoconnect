@@ -18,7 +18,7 @@ after_success:
        - export GIT_TAG=build-$TRAVIS_BRANCH-$(date -u "+%Y-%m-%d-%H-%M-%S")-$TRAVIS_BUILD_NUMBER
        - echo $GIT_TAG
        - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
-       - git push --quiet https://$GITHUB_OAUTH_TOKEN@github.com/dineshKumar777/CiscoVPN_Autoconnect $GIT_TAG
+       - git push --quiet https://$GITHUB_OAUTH_TOKEN@github.com/dineshKumar777/CiscoVPN_Autoconnect --$GIT_TAG
        
        
 branches:
