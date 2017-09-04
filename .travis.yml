@@ -10,6 +10,7 @@ after_success:
        - zip ReleasePackage $TRAVIS_BUILD_DIR
        - ls -R $TRAVIS_BUILD_DIR/ReleasePackage
        - ls -a $TRAVIS_BUILD_DIR/ReleasePackage
+       - ls -lh
        - echo "package successful"
 
         
