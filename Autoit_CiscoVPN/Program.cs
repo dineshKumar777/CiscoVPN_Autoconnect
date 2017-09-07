@@ -15,9 +15,7 @@ namespace Autoit_CiscoVPN
             //Remove depedency for AutoItX3_Assembly.dll
             //AppDomain.CurrentDomain.AssemblyResolve += (sender, arg) => { if (arg.Name.StartsWith("AutoItX3")) return Assembly.Load(Properties.Resources.AutoItX3_Assembly); return null; };
 
-            Console.WriteLine("-- Auto login script started");
             AutoLogin app = new AutoLogin();
-            Console.WriteLine("-- Auto login script completed successfully");
         }
     }
 }
