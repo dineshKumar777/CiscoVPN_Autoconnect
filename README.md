@@ -3,4 +3,6 @@
 [![platform](https://img.shields.io/badge/platform-windows-blue.svg)]()
 
 # CiscoVPN_Autoconnect
-Script that autoconnect Cisco VPN 
+Script that autoconnect Cisco VPN client by entering domain name, username, password and select group if any.
+
+
