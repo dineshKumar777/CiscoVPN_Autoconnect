@@ -11,23 +11,8 @@ after_success:
        - ls -R $TRAVIS_BUILD_DIR/ReleasePackage
        - ls -a $TRAVIS_BUILD_DIR/ReleasePackage
        - ls -lh
-       - echo "package successful"
-             
+       - echo "package successful"             
        
        
-jobs:
-  include:
-    - stage: GitHub Release
-      script: echo "Deploying to GitHub releases ..."
-      deploy:
-        provider: releases
-        api_key: $GITHUB_OAUTH_TOKEN
-        #file: ReleasePackage.zip
-        file_glob: true
-        file: $TRAVIS_BUILD_DIR/ReleasePackage/*
-        skip_cleanup: true
-        on:
-          tags: false
-          all_branches: true
 
      
