@@ -17,3 +17,5 @@ Script that autoconnect Cisco VPN client which automatically enter domain name, 
  - In Autoit_CiscoVPN.exe.config XML enter the required usercredentials [All fields are case sensitive]
  - Then run the script through Autoit_CiscoVPN.exe application or make a shortcut for this in desktop for ease of access.
  - Running the script for first time in WINDOWS 10, asks for permission and antivirus throws false alert. Ignore those popups and give permission.
+
+
