@@ -10,7 +10,7 @@ before build:
 
 cache:
  - packages -> **\packages.config
- - "%LocalAppData%\NuGet\Cache"
+ - %LocalAppData%\NuGet\Cache
  
  artifacts:
   # pushing a single file
