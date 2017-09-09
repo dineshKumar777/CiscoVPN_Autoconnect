@@ -7,10 +7,6 @@ verbosity: normal
 before build:
  - echo restoring nuget
  - cmd: nuget restore
-
-cache:
- - packages -> **\packages.config
- - %LocalAppData%\NuGet\Cache
  
  artifacts:
   # pushing a single file
