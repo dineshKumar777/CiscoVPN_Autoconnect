@@ -11,9 +11,6 @@ before build:
 artifacts:
  - path: test.zip
 
- - path: MyProject\bin\$(configuration)
-    name: myapp
-
  - path: logs
 
  - path: '**\*.nupkg'
