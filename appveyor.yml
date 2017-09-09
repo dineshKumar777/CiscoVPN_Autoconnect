@@ -2,12 +2,11 @@ version: 1.0.{build}
 
 platform: Any CPU
 configuration: Release
-
-before build:
- - cmd: nuget restore
-
 build:
  verbosity: normal
+
+before_build:
+ - cmd: nuget restore
 
 artifacts:
  - path: test.zip
