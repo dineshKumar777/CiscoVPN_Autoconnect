@@ -6,7 +6,6 @@ build:
  verbosity: normal
 
 before build:
- - cmd: echo restoring nuget
  - cmd: nuget restore
  
 artifacts:
