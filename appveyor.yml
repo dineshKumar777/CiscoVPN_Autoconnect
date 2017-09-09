@@ -2,7 +2,8 @@ version: 1.0.{build}
 
 platform: Any CPU
 configuration: Release
-verbosity: normal
+build:
+ verbosity: normal
 
 before build:
  - echo restoring nuget
