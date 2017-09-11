@@ -66,7 +66,6 @@ namespace Autoit_CiscoVPN
                 {
                     AutoItX.ControlClick(domainWindowTitle, "", disconnectButton); //Uncomment this line if you need disconnect vpn if its already connected
                     Environment.Exit(0); 
-                    //ShowErrorPopup($"Cisco VPN is ALREADY CONNECTED.");
                 }
             }
             else
