@@ -66,7 +66,6 @@ namespace Autoit_CiscoVPN
                 {
                     AutoItX.ControlClick(domainWindowTitle, "", disconnectButton); //Uncomment this line if you need disconnect vpn if its already connected
                     Environment.Exit(0); 
-                    //ShowErrorPopup($"Cisco VPN is ALREADY CONNECTED.");
                 }
             }
             else
@@ -144,7 +143,6 @@ namespace Autoit_CiscoVPN
             CheckControlVisibility(loginWindowTitle, okButton);
 
             CheckforGroupSelector(loginWindowTitle, groupDropdown);
-            WaitTillControlEnabled(loginWindowTitle, okButton);
             AutoItX.ControlSetText(loginWindowTitle, "", usernameTextbox, userName);
             AutoItX.ControlSetText(loginWindowTitle, "", passwordTextbox, passWord);
             AutoItX.ControlClick(loginWindowTitle, "", okButton);
@@ -169,12 +167,21 @@ namespace Autoit_CiscoVPN
             {
                 if (!string.IsNullOrEmpty(groupName))
                 {
-                    AutoItX.ControlCommand(windowTitle, "", groupDropdown, "SelectString", groupName);
-                    string selectedGroupName = AutoItX.ControlCommand(windowTitle, "", groupDropdown, "GetCurrentSelection", groupName);
+                    string defaultGroupName = AutoItX.ControlCommand(windowTitle, "", groupDropdown, "GetCurrentSelection", groupName); // get the default group name if any
+
+                    if(defaultGroupName != groupName || string.IsNullOrEmpty(defaultGroupName))
+                    {
+                        AutoItX.ControlCommand(windowTitle, "", groupDropdown, "SelectString", groupName);
+                        string selectedGroupName = AutoItX.ControlCommand(windowTitle, "", groupDropdown, "GetCurrentSelection", groupName);
 
 
-                    if (selectedGroupName != groupName)
-                        ShowErrorPopup($"Unable to find 'GROUP: {groupName}'. Check it in CONFIG file.");
+                        if (selectedGroupName != groupName)
+                            ShowErrorPopup($"Unable to find 'GROUP: {groupName}'. Check it in CONFIG file.");
+
+
+                        //After selecting a value from dropdown, popup window becomes disbles.. wait till it becomes active again
+                        WaitTillControlEnabled(loginWindowTitle, okButton); 
+                    }
                 }
                 else
                     ShowErrorPopup($"Enter valid GROUP {groupName} inside CONFIG file");

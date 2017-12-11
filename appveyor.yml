@@ -1,0 +1,10 @@
+version: 1.0.{build}
+
+platform: Any CPU
+configuration: Release
+build:
+ verbosity: normal
+
+before_build:
+ - cmd: nuget restore
+
