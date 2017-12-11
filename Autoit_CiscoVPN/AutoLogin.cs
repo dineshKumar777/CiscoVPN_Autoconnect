@@ -88,17 +88,24 @@ namespace Autoit_CiscoVPN
             stopwatch.Stop();
             AutoItX.Sleep(500); //Added this sleep for stability
         }
+        
         #endregion
 
 
         public AutoLogin()
         {
+            ConfigNullChecker();
             OpenCiscoVPN();
             ConnectToDomain();
             LoginUsingUserCredentials();
             AcceptTermsandConditionPopup(); //Will accept terms & conditions popup ifany
         }
 
+        private void ConfigNullChecker(){
+            if((ciscoExePath == String.Empty) || (userName == String.Empty) || (passWord == String.Empty) || (domainName == String.Empty)){
+                ShowErrorPopup("'Enter VPN credentials in CONFIG file'");
+            }
+        }
 
 
         private void OpenCiscoVPN()
