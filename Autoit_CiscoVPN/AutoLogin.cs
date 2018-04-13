@@ -100,11 +100,13 @@ namespace Autoit_CiscoVPN
             stopwatch.Stop();
             AutoItX.Sleep(500); //Added this sleep for stability
         }
+        
         #endregion
 
 
         public AutoLogin()
         {
+            ConfigNullChecker();
             OpenCiscoVPN();
             ConnectToDomain();
             if (checkcertificationerror == "yes") // Only wait for certification error popup when config have yes option. 
@@ -115,6 +117,11 @@ namespace Autoit_CiscoVPN
             AcceptTermsandConditionPopup(); //Will accept terms & conditions popup ifany
         }
 
+        private void ConfigNullChecker(){
+            if((ciscoExePath == String.Empty) || (userName == String.Empty) || (passWord == String.Empty) || (domainName == String.Empty)){
+                ShowErrorPopup("'Enter VPN credentials in CONFIG file'");
+            }
+        }
 
 
         private void OpenCiscoVPN()
