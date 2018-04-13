@@ -9,6 +9,7 @@ namespace Autoit_CiscoVPN
         public static string ciscoExePath = ConfigurationManager.AppSettings["ciscoexepath"];
         public static string domainName = ConfigurationManager.AppSettings["domain"];
         public static string groupName = ConfigurationManager.AppSettings["group"];
+        public static string checkcertificationerror = ConfigurationManager.AppSettings["checkcertificationerror"];
 
     }
 }

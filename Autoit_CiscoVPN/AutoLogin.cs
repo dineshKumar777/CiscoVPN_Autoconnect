@@ -33,6 +33,15 @@ namespace Autoit_CiscoVPN
         string acceptButton = "[CLASS:Button; TEXT:Accept; INSTANCE:1]";
         #endregion
 
+        #region Cisco_CertificationCheck handles
+        string certificationWindowTitle = "Cisco AnyConnect Secure Mobility Client";
+        string certificationWindowText = "Security Warning: Untrusted Server Certificate!";
+        string keepMeSafeButton = "[CLASS:Button; TEXT:Keep Me Safe; INSTANCE:1]";
+        string changeSettingButton = "[CLASS:Button; TEXT:Change Setting...; INSTANCE:2]";
+        string connectAnywayButton = "[CLASS:Button; ID:1067; INSTANCE:2]";
+        string cancelConnectionButton = "[CLASS:Button; TEXT:Cancel Connection; INSTANCE:1]";
+        #endregion
+
         #region Common methods
         private void ShowErrorPopup(string errorMsg)
         {
@@ -43,29 +52,32 @@ namespace Autoit_CiscoVPN
                 Environment.Exit(0);
         }
 
-        private void WaitForWindow(string windowID, int waitTime = 10)
+        private void WaitForWindow(string windowID, int waitTime = 10, string windowText = "")
         {
             AutoItX.AutoItSetOption("WinTitleMatchMode", 3);
-            var handle = AutoItX.WinWaitActive(windowID, "", waitTime);
+            var handle = AutoItX.WinWaitActive(windowID, windowText, waitTime);
 
-            if(windowID != termsandConditonWindowTitle) //Dont show errorpopup if there is no terms and condition popup
+            //if ((windowID != termsandConditonWindowTitle) || (windowID != certificationWindowTitle)) //Dont show errorpopup if there is no terms and condition popup
+            if ((windowID != termsandConditonWindowTitle) && (windowID != certificationWindowTitle)) //Dont show errorpopup if there is no terms and condition popup
             {
+                //do nothing
                 if (AutoItX.WinExists(windowID) == 0) //Autoit return 1 for success and 0 for failure
                     ShowErrorPopup($"'{windowID}' : unable to locate this window title");
             }
-            
         }
 
-        private void CheckControlVisibility(string windowTitle, string controlID)
+        private void CheckControlVisibility(string windowTitle, string controlID, string windowText = "")
         {
-            var isControlVisible = AutoItX.ControlCommand(windowTitle, "", controlID, "IsVisible", "");
+            var isControlVisible = AutoItX.ControlCommand(windowTitle, windowText, controlID, "IsVisible", "");
 
-            if(controlID == disconnectButton)
+            if (controlID == disconnectButton) //Disconnect VPN if its already connected
             {
                 if (Int16.Parse(isControlVisible) == 1) //Autoit will return 1 if the control is visible
                 {
                     AutoItX.ControlClick(domainWindowTitle, "", disconnectButton); //Uncomment this line if you need disconnect vpn if its already connected
-                    Environment.Exit(0); 
+                    WaitForWindow(domainWindowTitle, 10, "Ready to connect.");  //Close vpn window once it got disconnected successfully
+                    AutoItX.WinClose(domainWindowTitle, "Ready to connect.");
+                    Environment.Exit(0);
                 }
             }
             else
@@ -97,6 +109,10 @@ namespace Autoit_CiscoVPN
             ConfigNullChecker();
             OpenCiscoVPN();
             ConnectToDomain();
+            if (checkcertificationerror == "yes") // Only wait for certification error popup when config have yes option. 
+            {
+                CheckForCertificationErrorPopup();
+            }
             LoginUsingUserCredentials();
             AcceptTermsandConditionPopup(); //Will accept terms & conditions popup ifany
         }
@@ -140,6 +156,24 @@ namespace Autoit_CiscoVPN
             Console.WriteLine("-- Connecting to domain");
         }
 
+        private void CheckForCertificationErrorPopup()
+        {
+            //Wait for certification error popup. This is optional because all domains wont have certificate errors
+            WaitForWindow(certificationWindowTitle, 8, certificationWindowText);
+
+            if (AutoItX.WinExists(certificationWindowTitle, "Untrusted Server Blocked!") == 1)
+            {
+                CheckControlVisibility(certificationWindowTitle, keepMeSafeButton, "Keep Me Safe");
+                ShowErrorPopup("Fix certification issue and rerun the script..");
+            }
+            else if (AutoItX.WinExists(certificationWindowTitle, certificationWindowText) == 1)
+            {
+                CheckControlVisibility(certificationWindowTitle, connectAnywayButton);
+                AutoItX.ControlClick(certificationWindowTitle, "", connectAnywayButton);
+            }
+
+        }
+
         private void LoginUsingUserCredentials()
         {
             WaitForWindow(loginWindowTitle);
@@ -159,7 +193,7 @@ namespace Autoit_CiscoVPN
         private void AcceptTermsandConditionPopup()
         {
             WaitForWindow(termsandConditonWindowTitle, 4); // wait for 4 secs
-            if(AutoItX.WinExists(termsandConditonWindowTitle) == 1)
+            if (AutoItX.WinExists(termsandConditonWindowTitle) == 1)
             {
                 CheckControlVisibility(termsandConditonWindowTitle, acceptButton);
 
@@ -176,7 +210,7 @@ namespace Autoit_CiscoVPN
                 {
                     string defaultGroupName = AutoItX.ControlCommand(windowTitle, "", groupDropdown, "GetCurrentSelection", groupName); // get the default group name if any
 
-                    if(defaultGroupName != groupName || string.IsNullOrEmpty(defaultGroupName))
+                    if (defaultGroupName != groupName || string.IsNullOrEmpty(defaultGroupName))
                     {
                         AutoItX.ControlCommand(windowTitle, "", groupDropdown, "SelectString", groupName);
                         string selectedGroupName = AutoItX.ControlCommand(windowTitle, "", groupDropdown, "GetCurrentSelection", groupName);
@@ -187,7 +221,7 @@ namespace Autoit_CiscoVPN
 
 
                         //After selecting a value from dropdown, popup window becomes disbles.. wait till it becomes active again
-                        WaitTillControlEnabled(loginWindowTitle, okButton); 
+                        WaitTillControlEnabled(loginWindowTitle, okButton);
                     }
                 }
                 else

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dineshKumar777/CiscoVPN_Autoconnect.svg?branch=master)](https://travis-ci.org/dineshKumar777/CiscoVPN_Autoconnect)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/dineshKumar777/CiscoVPN_Autoconnect?branch=master&svg=true](https://ci.appveyor.com/project/dineshKumar777/ciscovpn-autoconnect)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 [![platform](https://img.shields.io/badge/platform-windows-blue.svg)]()
 
